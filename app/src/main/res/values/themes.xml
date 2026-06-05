@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GoTchaTerminal" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your theme here if needed -->
-    </style>
+    <style name="Theme.GoTchaTerminal"
+        parent="android:Theme.DeviceDefault.NoActionBar" />
 
 </resources>
