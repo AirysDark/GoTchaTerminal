@@ -78,7 +78,7 @@ class BLEManager(private val context: Context) {
                     devices
                 }
             }
-            
+
             activeCaptureSession?.let { session ->
                 val advert = AdvertInfo(
                     name = result.scanRecord?.deviceName,
@@ -98,12 +98,12 @@ class BLEManager(private val context: Context) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 _connectionState.value = ConnectionState.CONNECTED
                 addLog("Connected to ${gatt.device.address}")
-                
+
                 activeCaptureSession?.let {
                     it.deviceName = gatt.device.name
                     it.deviceAddress = gatt.device.address
                 }
-                
+
                 gatt.discoverServices()
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 _connectionState.value = ConnectionState.DISCONNECTED
@@ -120,13 +120,13 @@ class BLEManager(private val context: Context) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 _discoveredServices.value = gatt.services
                 addLog("Services discovered")
-                
+
                 activeCaptureSession?.let { session ->
                     session.services.clear()
                     gatt.services.forEach { service ->
                         session.services.add(ServiceInfo(
                             uuid = service.uuid.toString(),
-                            characteristics = service.characteristics.map { 
+                            characteristics = service.characteristics.map {
                                 CharInfo(it.uuid.toString(), it.properties)
                             }
                         ))
@@ -155,10 +155,15 @@ class BLEManager(private val context: Context) {
                     charUuid = characteristic.uuid.toString(),
                     data = value.toHexString()
                 )
-                packetLogger.log("RX (READ)", characteristic.uuid, value)
+                packetLogger.log(
+                    "RX (READ)",
+                    characteristic.service.uuid,
+                    characteristic.uuid,
+                    value
+                )
                 _characteristicValues.update { it + (characteristic.uuid to value) }
                 addLog("READ ${characteristic.uuid.toString().take(8)}: ${value.toHexString()}")
-                
+
                 _packetStream.tryEmit(packet)
                 activeCaptureSession?.packets?.add(packet)
             }
@@ -175,10 +180,15 @@ class BLEManager(private val context: Context) {
                 charUuid = characteristic.uuid.toString(),
                 data = value.toHexString()
             )
-            packetLogger.log("RX (NOTIF)", characteristic.uuid, value)
+            packetLogger.log(
+                "RX (NOTIF)",
+                characteristic.service.uuid,
+                characteristic.uuid,
+                value
+            )
             _characteristicValues.update { it + (characteristic.uuid to value) }
             addLog("NOTIF ${characteristic.uuid.toString().take(8)}: ${value.toHexString()}")
-            
+
             _packetStream.tryEmit(packet)
             activeCaptureSession?.packets?.add(packet)
         }
@@ -256,10 +266,15 @@ class BLEManager(private val context: Context) {
                 charUuid = characteristicUuid.toString(),
                 data = data.toHexString()
             )
-            packetLogger.log("TX", characteristicUuid, data)
+            packetLogger.log(
+                "TX",
+                serviceUuid,
+                characteristicUuid,
+                data
+            )
             _packetStream.tryEmit(packet)
             activeCaptureSession?.packets?.add(packet)
-            
+
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                 bluetoothGatt?.writeCharacteristic(char, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT)
             } else {
@@ -291,7 +306,7 @@ class BLEManager(private val context: Context) {
                 if (value != null) {
                     descriptor.value = value
                     gatt.writeDescriptor(descriptor)
-                    
+
                     if (enable) _notificationsEnabled.update { it + char.uuid }
                     else _notificationsEnabled.update { it - char.uuid }
                 }
