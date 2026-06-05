@@ -11,11 +11,10 @@ on:
       - main
       - master
 
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +30,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Grant Gradle Permission
+      - name: Make Gradle Executable
         run: chmod +x gradlew
 
       - name: Build Debug APK
