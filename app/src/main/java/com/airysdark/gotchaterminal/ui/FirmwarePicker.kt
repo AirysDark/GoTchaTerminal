@@ -8,14 +8,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.airysdark.gotchaterminal.firmware.FirmwareInfo
+import com.airysdark.gotchaterminal.models.firmware.FirmwareInfo
 
 @Composable
 fun FirmwarePicker(
     selectedFirmware: FirmwareInfo?,
     onFirmwareSelected: (Uri) -> Unit,
     onInternalFirmwareSelected: (String) -> Unit,
-    internalFirmwares: List<String>
+    internalFirmwares: List<String>,
 ) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -46,14 +46,14 @@ fun FirmwarePicker(
             }
         }
 
-        selectedFirmware?.let {
+        selectedFirmware?.let { fw: FirmwareInfo ->
             Spacer(modifier = Modifier.height(16.dp))
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp)) {
-                    Text("Selected: ${it.name}", style = MaterialTheme.typography.bodyLarge)
-                    Text("Size: ${it.size} bytes", style = MaterialTheme.typography.bodySmall)
-                    Text("CRC32: ${it.crc32}", style = MaterialTheme.typography.bodySmall)
-                    Text("SHA256: ${it.sha256.take(16)}...", style = MaterialTheme.typography.bodySmall)
+                    Text("Selected: ${fw.name}", style = MaterialTheme.typography.bodyLarge)
+                    Text("Size: ${fw.size} bytes", style = MaterialTheme.typography.bodySmall)
+                    Text("CRC32: ${fw.crc32}", style = MaterialTheme.typography.bodySmall)
+                    Text("SHA256: ${fw.sha256.take(16)}...", style = MaterialTheme.typography.bodySmall)
                 }
             }
         }

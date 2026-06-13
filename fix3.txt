@@ -1,0 +1,161 @@
+Gemini Final Pass Instructions: COMPLETE BUILD FIX (NO DELETIONS)
+
+GOAL:
+Let the project compile by ONLY resolving unresolved references in:
+- TerminalViewModel.kt
+- FirmwarePicker.kt
+
+DO NOT REFACTOR.
+DO NOT REMOVE ANY CODE.
+DO NOT DELETE UNUSED FEATURES.
+ONLY MAKE IT COMPILE.
+
+====================================================
+
+1. TerminalViewModel.kt FINAL FIX
+
+A) Missing BLE state references
+If these are unresolved:
+- scanResults
+- extendedDevices
+
+DO THIS ONLY:
+Bind them directly from BLEManager:
+
+val scanResults = bleManager.scanResults
+val extendedDevices = bleManager.extendedDevices
+
+DO NOT create new structures.
+
+---
+
+B) device / rssi unresolved
+Inside scan callbacks:
+
+result.device ? BluetoothDevice
+result.rssi ? Int
+
+Fix by explicitly typing:
+
+val result: ScanResult
+val device: BluetoothDevice
+val rssi: Int
+
+DO NOT remove callback logic.
+
+---
+
+C) Context unresolved
+Fix ONLY by ensuring constructor is:
+
+class TerminalViewModel(application: Application) : AndroidViewModel(application)
+
+Use:
+val context = getApplication<Application>()
+
+DO NOT remove any ViewModel logic.
+
+---
+
+D) GoTchaUUIDs unresolved
+Fix ONLY by importing:
+
+import com.airysdark.gotchaterminal.core.GoTchaUUIDs
+
+DO NOT redefine.
+
+---
+
+E) Type inference errors
+Every lambda missing type must be explicitly typed:
+
+{ result: ScanResult -> }
+
+DO NOT remove lambdas.
+
+---
+
+====================================================
+
+2. FirmwarePicker.kt FINAL FIX
+
+A) FirmwareInfo missing
+If unresolved:
+
+DO NOT delete usage.
+
+ONLY ensure:
+
+data class FirmwareInfo(
+    val name: String,
+    val size: Long,
+    val crc32: String = "",
+    val sha256: String = ""
+)
+
+If already exists ? do nothing.
+
+---
+
+B) name / size unresolved
+Fix by ensuring correct object usage:
+
+firmware.name
+firmware.size
+
+DO NOT remove UI bindings.
+
+---
+
+C) crc32 / sha256 unresolved
+If missing:
+- assume placeholder fields already in FirmwareInfo
+- DO NOT delete calls
+- DO NOT stub out UI
+
+---
+
+D) Composable errors
+Ensure:
+- all UI functions remain @Composable
+- DO NOT move or delete composable functions
+
+---
+
+E) let / inference issues
+Fix ONLY by adding explicit typing:
+
+firmware: FirmwareInfo
+
+DO NOT remove blocks.
+
+---
+
+====================================================
+
+FINAL RULE (CRITICAL)
+
+DO NOT:
+- remove code
+- remove features
+- remove screens
+- remove BLE logic
+- remove firmware logic
+- remove ViewModels
+- remove placeholders
+
+ONLY:
+- fix unresolved references
+- add missing imports
+- add missing type annotations
+- wire existing BLE + firmware layer
+
+====================================================
+
+EXPECTED RESULT:
+
+? Project compiles
+? No unresolved references in final pass
+? No deletions performed
+? All features preserved
+? Build completes successfully

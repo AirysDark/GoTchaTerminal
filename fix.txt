@@ -1,0 +1,103 @@
+GoTchaTerminal Diagnostic Report
+Project: GoTchaTerminal (Android + Wear OS + Multi-module BLE/Firmware Platform)
+Modules Scanned: :app, :wear, :core, :ble, :firmware, :models, :protocol, :storage
+1. File-by-File Breakdown
+Module: :core
+•
+GoTchaUUIDs.kt
+◦
+Warnings: Unused properties (SERVICE_UUID, KEY_UUID, BLOB_UUID, CTRL_UUID). Platform type inference warnings (inferred from UUID.fromString). (Severity: LOW)
+•
+DeviceModels.kt
+◦
+Warnings: Missing trailing comma in data class constructor. (Severity: LOW)
+Module: :ble
+•
+BLEManager.kt
+◦
+Warnings: Static reference to instance holding a Context (Memory Leak Risk). Unused property extendedBluetoothDevices. Deprecated member overrides (onCharacteristicRead). Deprecated usage of characteristic.value and writeCharacteristic. (Severity: HIGH / MEDIUM)
+•
+GattServerManager.kt
+◦
+Warnings: Deprecated characteristic.value usage. Uppercase private property name TAG. (Severity: LOW)
+Module: :app
+•
+TerminalViewModel.kt
+◦
+Warnings: Unused properties (Orange, ota, discoveredDevices, scanResults, extendedDevices). Unused internal classes/screens in Screen enum. Legacy Long overload for delay instead of Duration. Multiple unused functions (stopResearchRecording, writeCharacteristic, etc.). (Severity: MEDIUM)
+•
+TerminalScreen.kt
+◦
+Warnings: Unused import BluetoothAdapter. Unused variable connectionState in certain scopes. Redundant qualifier names. Missing trailing commas. (Severity: LOW)
+•
+FirmwarePicker.kt
+◦
+Warnings: Missing trailing comma in contract builder. (Severity: LOW)
+•
+MainActivity.kt
+◦
+Warnings: Potential duplicate permission request logic (redundant methods). (Severity: LOW)
+Module: :wear
+•
+MainTileService.kt
+◦
+Warnings: Missing trailing comma in builder. (Severity: LOW)
+•
+DevicesScreen.kt
+◦
+Warnings: Unused parameter e in catch block. Missing trailing comma in Composable parameters. (Severity: LOW)
+•
+SyncWorker.kt
+◦
+Warnings: Private property TAG starts with uppercase. Missing line breaks in JSONObject apply block. (Severity: LOW)
+Module: :firmware
+•
+FirmwareManager.kt
+◦
+Warnings: Static reference to instance holding a Context (Memory Leak Risk). Unused function getInstance. Deprecated toChar() conversion. Unused calculateHashes and applyVibrationPatch. (Severity: HIGH / MEDIUM)
+•
+FirmwareInspector.kt
+◦
+Warnings: Unused import android.util.Log. Deprecated toChar(). (Severity: LOW)
+Module: :protocol
+•
+IdentityProtocol.kt
+◦
+Warnings: Unused properties (ACTION_START_PAIRING). Unused functions (readKey, readBlob, writeDeviceAddress). Platform type inference warnings. (Severity: LOW)
+2. Cross-Module Analysis
+•
+Model Duplication/Mismatches:
+◦
+Resolved Issue: Redundant BleSession and PacketInfo models previously existed in :app and :models. These have been consolidated, but residual unused imports or properties in TerminalViewModel still reference old namespaces (Severity: MEDIUM).
+•
+BLE State Wiring:
+◦
+Current State: The :app layer now correctly consumes :core models (DeviceModel, ExtendedDeviceModel) emitted by :ble. However, BLEManager still maintains internal flows (_extendedBluetoothDevices) that are never used, increasing memory overhead. (Severity: MEDIUM)
+•
+Wear OS DataLayer:
+◦
+Current State: SyncWorker and WearSyncManager use com.google.android.gms.wearable.DataClient correctly. No mismatches detected in the protocol buffers/JSON schemas used for node communication. (Severity: LOW)
+•
+Dependency Management:
+◦
+Issue: Some modules use hardcoded strings for dependencies (e.g., material-icons-extended) instead of the version catalog (libs.versions.toml). (Severity: LOW)
+◦
+SDK Target: compileSdk and targetSdk are at 36; version 37 is available but not mandatory. (Severity: LOW)
+3. Build Blockers Summary
+•
+Total Errors: 0 (Project currently resolves all references and compiles).
+•
+Total Warnings: ~45
+•
+Top 5 Critical Risks:
+i.
+Memory Leak (BLEManager): Singleton holds a Context reference in a static field.
+ii.
+Memory Leak (FirmwareManager): Singleton holds a Context reference in a static field.
+iii.
+Deprecated API Usage (BLE): Overriding and using deprecated BluetoothGatt methods (e.g., onCharacteristicRead with byte array parameters instead of modern MTU-safe buffers).
+iv.
+Inferred Nullability: High risk of NullPointerException on GoTchaUUIDs and IdentityProtocol due to platform call inference without explicit nullability checks.
+v.
+Redundant Logic: Duplicate state flows in BLEManager (ExtendedBluetoothDevice vs ExtendedDeviceModel) creates synchronization debt.
+Root Cause Summary: The architecture-level issues stem from a Transitional State. The project was recently migrated from a monolithic :app structure to a multi-module :core + :ble + :models structure. While compilation blockers are resolved, the cleanup phase (removing duplicated state, fixing memory leaks in new singletons, and migrating to modern BLE APIs) is incomplete.

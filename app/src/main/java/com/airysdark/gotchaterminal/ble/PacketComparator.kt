@@ -1,5 +1,10 @@
 package com.airysdark.gotchaterminal.ble
 
+import com.airysdark.gotchaterminal.models.ble.BleSession
+import com.airysdark.gotchaterminal.models.ble.ComparisonResult
+import com.airysdark.gotchaterminal.models.ble.PacketInfo
+import com.airysdark.gotchaterminal.models.ble.ServiceInfo
+
 class PacketComparator {
 
     fun compare(realSession: BleSession, espSession: BleSession): ComparisonResult {
@@ -14,8 +19,8 @@ class PacketComparator {
         }
 
         // 2. Compare Services & Characteristics
-        val realServices = realSession.services.map { it.uuid }.toSet()
-        val espServices = espSession.services.map { it.uuid }.toSet()
+        val realServices = realSession.services.map { s: ServiceInfo -> s.uuid }.toSet()
+        val espServices = espSession.services.map { s: ServiceInfo -> s.uuid }.toSet()
 
         if (realServices != espServices) {
             diffs.add("SERVICES: Missing/Extra services detected.")
@@ -25,11 +30,11 @@ class PacketComparator {
             if (extraInEsp.isNotEmpty()) diffs.add("  Extra in ESP: $extraInEsp")
         }
 
-        realSession.services.forEach { realService ->
-            val espService = espSession.services.find { it.uuid == realService.uuid }
+        realSession.services.forEach { realService: ServiceInfo ->
+            val espService = espSession.services.find { s: ServiceInfo -> s.uuid == realService.uuid }
             if (espService != null) {
-                val realChars = realService.characteristics.map { it.uuid }.toSet()
-                val espChars = espService.characteristics.map { it.uuid }.toSet()
+                val realChars = realService.characteristics.map { c -> c.uuid }.toSet()
+                val espChars = espService.characteristics.map { c -> c.uuid }.toSet()
                 if (realChars != espChars) {
                     diffs.add("CHARS: Mismatch in service ${realService.uuid}")
                 }
@@ -38,8 +43,8 @@ class PacketComparator {
 
         // 3. Compare Packet Sequence (Reads, Writes, Notifs)
         // This is complex as timing varies, but we can compare the order of characteristic interaction.
-        val realSequence = realSession.packets.map { "${it.type}:${it.charUuid}" }
-        val espSequence = espSession.packets.map { "${it.type}:${it.charUuid}" }
+        val realSequence = realSession.packets.map { p: PacketInfo -> "${p.type}:${p.charUuid}" }
+        val espSequence = espSession.packets.map { p: PacketInfo -> "${p.type}:${p.charUuid}" }
 
         if (realSequence != espSequence) {
             diffs.add("SEQUENCE: Interaction order differs.")
@@ -47,13 +52,13 @@ class PacketComparator {
         }
 
         // 4. Data Comparison
-        val realDataMap = realSession.packets.groupBy { "${it.type}:${it.charUuid}" }
-        val espDataMap = espSession.packets.groupBy { "${it.type}:${it.charUuid}" }
+        val realDataMap = realSession.packets.groupBy { p: PacketInfo -> "${p.type}:${p.charUuid}" }
+        val espDataMap = espSession.packets.groupBy { p: PacketInfo -> "${p.type}:${p.charUuid}" }
 
-        realDataMap.forEach { (key, packets) ->
+        realDataMap.forEach { (key: String, packets: List<PacketInfo>) ->
             val espPackets = espDataMap[key]
             if (espPackets != null) {
-                packets.forEachIndexed { index, packet ->
+                packets.forEachIndexed { index: Int, packet: PacketInfo ->
                     if (index < espPackets.size && packet.data != espPackets[index].data) {
                         diffs.add("DATA: Mismatch at $key (Index $index). Real: ${packet.data}, ESP: ${espPackets[index].data}")
                     }

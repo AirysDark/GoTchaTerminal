@@ -1,0 +1,246 @@
+GoTchaTerminal v2.0 ? Gemini To-Do List
+
+====================================================
+PHONE APP
+====================================================
+
+SCREEN: Home
+----------------------------------------
+Device Status Card
+- Connected Device Name: CONNECTED
+- Connection State: CONNECTED
+- RSSI Signal Strength: CONNECTED
+- Battery Level: CONNECTED
+- Session Duration: PARTIALLY CONNECTED
+- Last Activity Timestamp: PARTIALLY CONNECTED
+
+Quick Actions
+- Scan Devices: CONNECTED
+- Connect Device: CONNECTED
+- Reconnect Last Device: NOT IMPLEMENTED (TID: HA01)
+- Disconnect Device: CONNECTED
+
+Live Activity
+- Notifications Received Counter: PARTIALLY CONNECTED
+- Packets Captured Counter: PARTIALLY CONNECTED
+- Services Discovered Counter: PARTIALLY CONNECTED
+- Recent Events Feed: NOT IMPLEMENTED (TID: HA02)
+
+Recent Devices
+- Recently Connected Devices List: CONNECTED
+
+====================================================
+SCREEN: Devices
+----------------------------------------
+Scanner
+- Scan Devices: CONNECTED
+- Filter Results: NOT IMPLEMENTED (TID: DB01)
+- Sort By RSSI: NOT IMPLEMENTED (TID: DB02)
+- Search Devices: NOT IMPLEMENTED (TID: DB03)
+
+Device Manager
+- Saved Devices: PARTIALLY CONNECTED
+- Favorite Devices: NOT IMPLEMENTED (TID: DB04)
+- Recent Devices: CONNECTED
+
+Connection Tools
+- Pair Device: PARTIALLY CONNECTED
+- Connect: CONNECTED
+- Disconnect: CONNECTED
+- Auto Reconnect: NOT IMPLEMENTED (TID: DB05)
+
+Device Information
+- Device Name: CONNECTED
+- Manufacturer Data: PARTIALLY CONNECTED
+- Advertisements: PARTIALLY CONNECTED
+- Services: PARTIALLY CONNECTED
+- Characteristics: PARTIALLY CONNECTED
+
+====================================================
+SCREEN: Go-tcha
+----------------------------------------
+Device Status
+- Battery Level: CONNECTED
+- Firmware Version: PARTIALLY CONNECTED
+- Device Information: PARTIALLY CONNECTED
+- Connection Health: NOT IMPLEMENTED (TID: GT01)
+
+Auto Features
+- Auto Catch: NOT IMPLEMENTED (TID: GT02)
+- Auto Spin: NOT IMPLEMENTED (TID: GT03)
+- Catch Statistics: NOT IMPLEMENTED (TID: GT04)
+- Spin Statistics: NOT IMPLEMENTED (TID: GT05)
+
+Device Controls
+- Vibration Control: PARTIALLY CONNECTED
+- Display Control: PARTIALLY CONNECTED
+- Animation Control: NOT IMPLEMENTED (TID: GT06)
+- LED Control: PARTIALLY CONNECTED
+
+Configuration
+- Catch New Pokémon: NOT IMPLEMENTED (TID: GT07)
+- Catch Known Pokémon: NOT IMPLEMENTED (TID: GT08)
+- Spin PokéStops: NOT IMPLEMENTED (TID: GT09)
+- Notification Settings: PARTIALLY CONNECTED
+
+Diagnostics
+- Live Device Data: PARTIALLY CONNECTED
+- BLE Activity: PARTIALLY CONNECTED
+- Command Monitor: NOT IMPLEMENTED (TID: GT10)
+- Error Logs: PARTIALLY CONNECTED
+
+Reverse Engineering
+- Command Explorer: NOT IMPLEMENTED (TID: GT11)
+- Characteristic Mapping: PARTIALLY CONNECTED
+- Packet Analysis: PARTIALLY CONNECTED
+- Unknown Command Analysis: NOT IMPLEMENTED (TID: GT12)
+
+====================================================
+SCREEN: Research
+----------------------------------------
+GATT Tools
+- GATT Explorer: NOT IMPLEMENTED (TID: R01)
+- Service Browser: PARTIALLY CONNECTED
+- Characteristic Browser: PARTIALLY CONNECTED
+
+Monitoring
+- Notification Monitor: PARTIALLY CONNECTED
+- Packet Monitor: PARTIALLY CONNECTED
+- Characteristic Monitor: PARTIALLY CONNECTED
+
+Analysis
+- Identity Terminal: PARTIALLY CONNECTED
+- Auth Analyzer: NOT IMPLEMENTED (TID: R02)
+- Security Diagnostics: PARTIALLY CONNECTED
+- Challenge Monitor: NOT IMPLEMENTED (TID: R03)
+- Comparison Mode: PARTIALLY CONNECTED
+
+Interactive Terminal
+- Raw BLE Terminal: PARTIALLY CONNECTED
+- HEX Console: PARTIALLY CONNECTED
+- ASCII Console: PARTIALLY CONNECTED
+- Packet Replay: NOT IMPLEMENTED (TID: R04)
+- Read Characteristic: PARTIALLY CONNECTED
+- Write Characteristic: PARTIALLY CONNECTED
+- Subscribe To Notifications: NOT IMPLEMENTED (TID: R05)
+- Live RX/TX Display: PARTIALLY CONNECTED
+- Save Session: NOT IMPLEMENTED (TID: R06)
+- Load Session: NOT IMPLEMENTED (TID: R07)
+
+Advanced Tools
+- UUID Database: PARTIALLY CONNECTED
+- Hex Viewer: NOT IMPLEMENTED (TID: R08)
+- Packet Decoder: NOT IMPLEMENTED (TID: R09)
+- Session Recorder: NOT IMPLEMENTED (TID: R10)
+
+Logging
+- Packet Logger: CONNECTED
+- Export Logs: NOT IMPLEMENTED (TID: R11)
+- Import Logs: NOT IMPLEMENTED (TID: R12)
+- Save Session: NOT IMPLEMENTED (TID: R13)
+
+====================================================
+SCREEN: Emulation
+----------------------------------------
+Advertisement Lab
+- Advertisement Builder: NOT IMPLEMENTED (TID: E01)
+- Advertisement Monitor: PARTIALLY CONNECTED
+- Advertisement Replay: NOT IMPLEMENTED (TID: E02)
+
+Emulators
+- Pokémon GO Plus Emulator: NOT IMPLEMENTED (TID: E03)
+- Go-tcha Emulator: NOT IMPLEMENTED (TID: E04)
+
+Peripheral Lab
+- GATT Server Lab: NOT IMPLEMENTED (TID: E05)
+- Service Generator: NOT IMPLEMENTED (TID: E06)
+- Characteristic Generator: NOT IMPLEMENTED (TID: E07)
+
+Testing
+- Connection Tester: PARTIALLY CONNECTED
+- Compatibility Tester: NOT IMPLEMENTED (TID: E08)
+- Virtual Device Tester: NOT IMPLEMENTED (TID: E09)
+
+====================================================
+SCREEN: Firmware
+----------------------------------------
+Analysis
+- Firmware Analysis: PARTIALLY CONNECTED
+- Firmware Explorer: PARTIALLY CONNECTED
+- Binary Viewer: PARTIALLY CONNECTED
+- String Extractor: NOT IMPLEMENTED (TID: F01)
+- UUID Extractor: NOT IMPLEMENTED (TID: F02)
+- Header Analyzer: NOT IMPLEMENTED (TID: F03)
+- Memory Map Viewer: NOT IMPLEMENTED (TID: F04)
+
+OTA
+- OTA Flasher: PARTIALLY CONNECTED
+- OTA Capture: PARTIALLY CONNECTED
+- OTA Logger: NOT IMPLEMENTED (TID: F05)
+- SUOTA Tools: NOT IMPLEMENTED (TID: F06)
+
+Research
+- Firmware Diff: NOT IMPLEMENTED (TID: F07)
+- Version Comparison: NOT IMPLEMENTED (TID: F08)
+- Firmware Database: NOT IMPLEMENTED (TID: F09)
+- Patch Generator: NOT IMPLEMENTED (TID: F10)
+- Patch Analyzer: NOT IMPLEMENTED (TID: F11)
+
+Firmware Extraction
+- Key Extraction: PARTIALLY CONNECTED
+- Blob Extraction: PARTIALLY CONNECTED
+- Config Extraction: NOT IMPLEMENTED (TID: F12)
+- Session Export: NOT IMPLEMENTED (TID: F13)
+
+Utilities
+- Backup Firmware: NOT IMPLEMENTED (TID: F14)
+- Restore Firmware: NOT IMPLEMENTED (TID: F15)
+- Export Reports: NOT IMPLEMENTED (TID: F16)
+- Firmware Archive: NOT IMPLEMENTED (TID: F17)
+
+====================================================
+SCREEN: Settings
+----------------------------------------
+Application
+- Theme: CONNECTED
+- Storage: PARTIALLY CONNECTED
+- Logging: CONNECTED
+
+Bluetooth
+- Permissions: CONNECTED
+- Scan Settings: PARTIALLY CONNECTED
+- Connection Settings: PARTIALLY CONNECTED
+
+Developer
+- Debug Mode: CONNECTED
+- Verbose Logging: PARTIALLY CONNECTED
+- Experimental Features: NOT IMPLEMENTED (TID: S01)
+- Advanced Firmware Features: NOT IMPLEMENTED (TID: S02)
+- BLE Debug Console: NOT IMPLEMENTED (TID: S03)
+
+About
+- Version Information: CONNECTED
+- Credits: CONNECTED
+- Diagnostics: PARTIALLY CONNECTED
+
+====================================================
+COMPANION WATCH APP
+====================================================
+BOTTOM NAVIGATION
+- Status: PARTIALLY CONNECTED
+- Devices: PARTIALLY CONNECTED
+- Terminal: PARTIALLY CONNECTED
+- Capture: NOT IMPLEMENTED (TID: W01)
+- Tools: NOT IMPLEMENTED (TID: W02)
+- Research: NOT IMPLEMENTED (TID: W03)
+- Quick Tiles: NOT IMPLEMENTED (TID: W04)
+- Complications: NOT IMPLEMENTED (TID: W05)
+- Background Sync: NOT IMPLEMENTED (TID: W06)
+- Offline Data Recording: NOT IMPLEMENTED (TID: W07)
+
+====================================================
+NOTES
+- All "PARTIALLY CONNECTED" items have UI elements, but some or all callbacks are incomplete.
+- All "NOT IMPLEMENTED" items need wiring to BLEManager, ViewModels, and proper persistence/logic.
+- Task IDs (TID) are unique and can be used for tracking implementation.
+- Gemini should focus on wiring all callbacks, completing offline caching and sync, and finalizing firmware extraction and OTA flows.

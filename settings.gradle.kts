@@ -24,4 +24,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "GoTchaTerminal"
 include(":app")
- 
+include(":wear")
+include(":core")
+include(":ble")
+include(":firmware")
+include(":protocol")
+include(":models")
+include(":storage")

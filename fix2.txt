@@ -1,0 +1,99 @@
+Gemini Instructions: Fix MainTileService.kt (Wear Tiles) Compilation Errors
+
+PROJECT: GoTchaTerminal Wear Module
+
+CRITICAL RULE:
+DO NOT DELETE ANY CODE, FUNCTIONS, OR TILE LOGIC.
+ONLY FIX IMPORTS, MISSING REFERENCES, AND REPLACE DEPRECATED TILE API USAGE.
+
+====================================================
+1. FIX: Unresolved reference 'LayoutDefaults'
+
+ISSUE:
+LayoutDefaults is no longer available in current Wear Tiles libraries.
+
+FIX:
+Replace ALL occurrences of:
+LayoutDefaults
+
+WITH the correct Wear Tiles Material import:
+
+import androidx.wear.tiles.material.layouts.PrimaryLayoutDefaults
+
+OR (if using Material3 tiles):
+
+import androidx.wear.protolayout.material.layouts.PrimaryLayoutDefaults
+
+BUT DO NOT REMOVE EXISTING LAYOUT CODE.
+
+JUST UPDATE IMPORT + SYMBOL RESOLUTION.
+
+====================================================
+2. FIX: Unresolved reference 'toLayoutElement'
+
+ISSUE:
+toLayoutElement is missing because missing Material / ProtoLayout extension imports.
+
+FIX:
+
+ADD REQUIRED IMPORTS:
+
+import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.material.Text
+import androidx.wear.protolayout.material.layouts.EdgeContentLayout
+import androidx.wear.protolayout.material.layouts.PrimaryLayout
+
+AND ENSURE:
+
+Any call like:
+something.toLayoutElement()
+
+MUST BE REPLACED WITH EQUIVALENT:
+
+LayoutElementBuilders.Box.Builder()
+OR proper Material tile builder conversion.
+
+DO NOT REMOVE TILE STRUCTURE ? ONLY REWIRE BUILDER CALLS.
+
+====================================================
+3. FIX: Wear Tiles dependency mismatch (ROOT CAUSE CHECK)
+
+ENSURE in build.gradle:
+
+implementation("androidx.wear.tiles:tiles-material:1.4.1")
+implementation("androidx.wear.protolayout:protolayout:1.2.1")
+implementation("androidx.wear.protolayout:protolayout-material:1.2.1")
+
+IF MISSING ? ADD ONLY, DO NOT REMOVE ANY EXISTING DEPENDENCIES.
+
+====================================================
+4. TYPO FIX
+
+- Replace all "GoTcha" typos ONLY in strings/comments where required.
+- DO NOT ALTER IDENTIFIERS OR LOGIC.
+
+====================================================
+5. SAFETY RULE (CRITICAL)
+
+DO NOT:
+- delete MainTileService
+- delete any tile functions
+- remove layout logic
+- simplify or refactor architecture
+
+ONLY:
+- fix imports
+- fix missing classes
+- replace deprecated Tile APIs
+- correct type references
+
+====================================================
+6. FINAL RESULT
+
+After fixes:
+? LayoutDefaults resolves
+? toLayoutElement resolves
+? Tile compiles
+? No code removed
+? Existing tile logic preserved
+? Wear OS module builds successfully

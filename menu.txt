@@ -1,0 +1,167 @@
+# Gemini: GoTchaTerminal v2.0 & Wear OS Companion Menu Implementation Instructions
+
+## Goal
+Implement a **workflow-oriented navigation structure** for GoTchaTerminal v2.0 on Android (phone) and a Wear OS companion app.
+
+- Phone app: Full BLE research, firmware analysis, session capture, and GATT emulation.
+- Watch app: Portable BLE field tool, packet capture, quick terminal access, offline recording, and auto-sync with phone.
+
+---
+
+## 1. Phone App Menu (Bottom Navigation)
+
+**Navigation Items:**
+
+1. Home
+2. Devices
+3. Go-tcha
+4. Research
+5. Emulation
+6. Firmware
+7. Settings
+
+**Implementation Steps:**
+
+1. Use **Jetpack Compose** with Material 3.
+2. Create a root Composable `MainScreen` with `Scaffold`:
+   - `BottomNavigationBar` with 7 items.
+   - Each item maps to a screen route.
+3. Implement **NavHost** for navigation.
+4. Create placeholder Composables for each screen:
+   - HomeScreen, DevicesScreen, GoTchaScreen, ResearchScreen, EmulationScreen, FirmwareScreen, SettingsScreen.
+5. Wire **ViewModels** to each screen for reactive state updates (BLEManager, FirmwareManager, SessionManager).
+
+**Screen Details:**
+
+- **HomeScreen:** Device status, quick actions, live activity, recent devices.
+- **DevicesScreen:** Scanner, device manager, connection tools, device information.
+- **GoTchaScreen:** Device-specific status, auto features, controls, configuration, diagnostics, reverse engineering.
+- **ResearchScreen:** GATT tools, monitoring, analysis, interactive terminal, advanced tools, logging.
+- **EmulationScreen:** Advertisement lab, emulators, peripheral lab, testing.
+- **FirmwareScreen:** Analysis, OTA, research, firmware extraction, utilities.
+- **SettingsScreen:** Application, Bluetooth, Developer, About.
+
+---
+
+## 2. Wear OS Companion Menu (Bottom Navigation)
+
+**Navigation Items:**
+
+1. Status
+2. Devices
+3. Terminal
+4. Capture
+5. Tools
+6. Research
+
+**Implementation Steps:**
+
+1. Create `:wear` module.
+2. Use **Material 3 Wear Compose**.
+3. Build `Scaffold` with `ScalingLazyColumn` for compact vertical menus.
+4. Implement `BottomNavigation` (or swipe tabs if preferred for small screens).
+5. Create Composables for each screen:
+   - StatusScreen, DevicesScreen, TerminalScreen, CaptureScreen, ToolsScreen, ResearchScreen.
+6. Integrate **WearSyncManager** for automatic sync with phone.
+
+**Screen Details:**
+
+- **StatusScreen:** Device & session status, quick actions (connect, disconnect, scan, sync).
+- **DevicesScreen:** Scanner, device details, actions (connect, save, start capture).
+- **TerminalScreen:** HEX, ASCII, Live RX/TX streams, presets, automatic logging.
+- **CaptureScreen:** Start/stop recording, monitor notifications, reads/writes/ads, export, markers, offline recording.
+- **ToolsScreen:** Advertisement tools, GATT tools, Go-tcha tools, developer tools.
+- **ResearchScreen:** Challenge monitor, UUID browser, packet replay, service diff, session compare.
+
+---
+
+## 3. Shared Modules & Components
+
+- **:core** ? common utilities.
+- **:ble** ? BLE models & manager.
+- **:firmware** ? firmware parsers & OTA.
+- **:protocol** ? challenge/response models.
+- **:models** ? session, device, packet models.
+- **:storage** ? Room database for caching sessions, packets, and offline data.
+
+**Shared Models:**
+
+- BLE Models
+- Packet Models
+- Session Models
+- Export Formats
+- UUID Database
+- Device Profiles
+- Advertisement Profiles
+- Authentication Models
+- Challenge Response Models
+
+---
+
+## 4. Data Flow / Communication
+
+**Phone ? Watch using Wear Data Layer:**
+
+- MessageClient
+- DataClient
+- CapabilityClient
+
+**Watch ? Phone:**
+
+- Packet Upload
+- Session Upload
+- Device Discovery Results
+- Research Data
+- Advertisement Captures
+- Challenge/Authentication Logs
+
+**Phone ? Watch:**
+
+- Device Status
+- Firmware Info
+- OTA Status
+- Configuration Updates
+- UUID & Device Profile Updates
+
+---
+
+## 5. UI / Interaction Guidelines
+
+- Material 3 design system
+- Dark theme default
+- Rounded cards and large touch targets
+- Responsive layouts (square/round screens)
+- Rotary input support (for Wear OS)
+- Live connection indicators
+- Persistent status banner on phone Home
+- Search support in lists
+- Every menu item: wired or marked "Not Yet Implemented" with task ID
+- Automatic caching for all watch BLE activity
+
+---
+
+## 6. Implementation Phases
+
+**Phase 1:** Scaffold Modules
+- Create `:wear` module
+- Add navigation, Material 3, Room database, BLE manager
+
+**Phase 2:** Status & Devices screens on watch
+
+**Phase 3:** Terminal & Capture screens on watch, local recording
+
+**Phase 4:** Tools & Research screens on watch
+
+**Phase 5:** Phone sync, session export, packet upload, auto-upload queue
+
+**Phase 6:** Quick Tiles, complications, background sync, upload recovery
+
+---
+
+**Important Notes:**
+
+- Ensure all buttons are **wired** to ViewModel actions.
+- BLEManager must provide real-time updates for the UI.
+- Offline-first caching on watch is critical.
+- Phone app remains the master for heavy analysis and firmware patching.
+- All new screens must be integrated into navigation graphs and BottomNavigation.

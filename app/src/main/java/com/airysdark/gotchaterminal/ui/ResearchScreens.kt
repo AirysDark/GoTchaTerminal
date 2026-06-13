@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,7 +25,7 @@ fun ResearchMenuScreen(onNavigate: (TerminalViewModel.Screen) -> Unit, onBack: (
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text("Research & Analysis") },
-            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, contentDescription = null) } }
+            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) } }
         )
         
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -37,7 +38,7 @@ fun ResearchMenuScreen(onNavigate: (TerminalViewModel.Screen) -> Unit, onBack: (
             ResearchMenuItem("Security Key Challenge Monitor", "Capture first 30s and analyze patterns.", Icons.Default.MonitorHeart) {
                 onNavigate(TerminalViewModel.Screen.SECURITY_MONITOR)
             }
-            ResearchMenuItem("Identity Service Terminal", "Low-level access to Go-tcha Evolve Identity characteristics.", Icons.Default.Terminal) {
+            ResearchMenuItem("Identity Service Terminal", "Low-level access to GoTcha Evolve Identity characteristics.", Icons.Default.Terminal) {
                 onNavigate(TerminalViewModel.Screen.TERMINAL)
             }
         }
@@ -60,15 +61,18 @@ fun ResearchMenuItem(title: String, subtitle: String, icon: androidx.compose.ui.
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChallengeResponseScreen(viewModel: TerminalViewModel) {
+fun ChallengeResponseScreen(viewModel: TerminalViewModel, onBack: () -> Unit) {
     val logs by viewModel.researchLogs.collectAsState()
     val sdf = remember { SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault()) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text("Challenge-Response") },
-            navigationIcon = { IconButton(onClick = { viewModel.navigateTo(TerminalViewModel.Screen.RESEARCH_MENU) }) { Icon(Icons.Default.ArrowBack, contentDescription = null) } },
+            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) } },
             actions = {
+                Button(onClick = { viewModel.startChallengeResponseAnalysis() }, modifier = Modifier.padding(end = 8.dp)) {
+                    Text("Record")
+                }
                 IconButton(onClick = { viewModel.exportResearchLogs() }) { Icon(Icons.Default.Save, contentDescription = "Export JSON") }
                 IconButton(onClick = { viewModel.clearResearchLogs() }) { Icon(Icons.Default.Delete, contentDescription = "Clear") }
             }
@@ -98,13 +102,13 @@ fun ChallengeResponseScreen(viewModel: TerminalViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecurityMonitorScreen(viewModel: TerminalViewModel) {
+fun SecurityMonitorScreen(viewModel: TerminalViewModel, onBack: () -> Unit) {
     val logs by viewModel.researchLogs.collectAsState()
     
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text("Security Key Monitor") },
-            navigationIcon = { IconButton(onClick = { viewModel.navigateTo(TerminalViewModel.Screen.RESEARCH_MENU) }) { Icon(Icons.Default.ArrowBack, contentDescription = null) } },
+            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) } },
             actions = {
                 Button(onClick = { viewModel.startSecurityMonitor() }) {
                     Text("Capture 30s")
@@ -147,45 +151,76 @@ fun analyzePatterns(hex: String): List<String> {
     return issues
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun BleTerminalScreen(viewModel: TerminalViewModel) {
-    var serviceInput by remember { mutableStateOf("addc3e26-4aa5-4c1a-8a6a-735db4e01c6c") }
-    var charInput by remember { mutableStateOf("addc3e26-4aa5-4c1a-8a6a-735db4e01c6f") }
-    var dataInput by remember { mutableStateOf("") }
-    val charValues by viewModel.characteristicValues.collectAsState()
+fun BleTerminalScreen(viewModel: TerminalViewModel, onBack: () -> Unit) {
+    val serviceUuid by viewModel.terminalServiceUuid.collectAsState()
+    val charUuid by viewModel.terminalCharUuid.collectAsState()
+    val dataInput by viewModel.terminalDataInput.collectAsState()
     val logs by viewModel.logs.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text("Identity Terminal") },
-            navigationIcon = { IconButton(onClick = { viewModel.navigateTo(TerminalViewModel.Screen.RESEARCH_MENU) }) { Icon(Icons.Default.ArrowBack, contentDescription = null) } }
+            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) } }
         )
 
         Column(modifier = Modifier.padding(16.dp)) {
-            OutlinedTextField(value = serviceInput, onValueChange = { serviceInput = it }, label = { Text("Service UUID") }, modifier = Modifier.fillMaxWidth())
-            OutlinedTextField(value = charInput, onValueChange = { charInput = it }, label = { Text("Char UUID") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(
+                value = serviceUuid,
+                onValueChange = { viewModel.updateTerminalServiceUuid(it) },
+                label = { Text("Service UUID") },
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace)
+            )
+            OutlinedTextField(
+                value = charUuid,
+                onValueChange = { viewModel.updateTerminalCharUuid(it) },
+                label = { Text("Characteristic UUID") },
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace)
+            )
             
             Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = { viewModel.readCharacteristic(UUID.fromString(serviceInput), UUID.fromString(charInput)) }, modifier = Modifier.weight(1f)) { Text("Read") }
-                Button(onClick = { viewModel.toggleNotification(UUID.fromString(serviceInput), UUID.fromString(charInput)) }, modifier = Modifier.weight(1f)) { Text("Notify") }
+                Button(onClick = { viewModel.readTerminalCharacteristic() }, modifier = Modifier.weight(1f)) { 
+                    Icon(Icons.Default.Download, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text("Read") 
+                }
+                Button(onClick = { viewModel.toggleTerminalNotification() }, modifier = Modifier.weight(1f)) { 
+                    Icon(Icons.Default.Notifications, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text("Notify") 
+                }
             }
 
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                OutlinedTextField(value = dataInput, onValueChange = { dataInput = it }, label = { Text("Hex Data") }, modifier = Modifier.weight(1f))
-                IconButton(onClick = { viewModel.writeCharacteristic(UUID.fromString(serviceInput), UUID.fromString(charInput), dataInput) }) {
-                    Icon(Icons.Default.Send, contentDescription = null)
+                OutlinedTextField(
+                    value = dataInput,
+                    onValueChange = { viewModel.updateTerminalDataInput(it) },
+                    label = { Text("Hex Data") },
+                    modifier = Modifier.weight(1f),
+                    placeholder = { Text("e.g. 010203") },
+                    textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace)
+                )
+                IconButton(onClick = { viewModel.writeTerminalCharacteristic() }) {
+                    Icon(Icons.Default.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.primary)
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Go-tcha Identity Shortcuts:", style = MaterialTheme.typography.labelLarge)
+            Text("GoTcha Identity Shortcuts:", style = MaterialTheme.typography.labelLarge)
             
-            FlowRow(modifier = Modifier.fillMaxWidth(), maxItemsInEachRow = 3) {
-                ShortcutChip("Read MAC") { charInput = "addc3e26-4aa5-4c1a-8a6a-735db4e01c6f"; viewModel.readMac() }
-                ShortcutChip("Read Adv") { charInput = "addc3e26-4aa5-4c1a-8a6a-735db4e01c70"; viewModel.readAdvert() }
-                ShortcutChip("Status") { charInput = "addc3e26-4aa5-4c1a-8a6a-735db4e01c71"; viewModel.readStatus() }
+            FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                ShortcutChip("Read MAC") { viewModel.readMac() }
+                ShortcutChip("Read Adv") { viewModel.readAdvert() }
+                ShortcutChip("Status") { viewModel.readStatus() }
+                ShortcutChip("Key") { viewModel.readKey() }
+                ShortcutChip("Blob") { viewModel.readBlob() }
                 ShortcutChip("Dump") { viewModel.dumpIdentity() }
+                ShortcutChip("Save BIN") { viewModel.saveValueToFile("identity", "bin") }
+                ShortcutChip("Save JSON") { viewModel.saveValueToFile("identity", "json") }
+                ShortcutChip("Connected MAC") { viewModel.readConnectedMac() }
                 ShortcutChip("Compare") { viewModel.navigateTo(TerminalViewModel.Screen.COMPARISON) }
             }
 
@@ -197,13 +232,50 @@ fun BleTerminalScreen(viewModel: TerminalViewModel) {
 
 @Composable
 fun ShortcutChip(label: String, onClick: () -> Unit) {
-    AssistChip(onClick = onClick, label = { Text(label, fontSize = 10.sp) }, modifier = Modifier.padding(2.dp))
+    AssistChip(
+        onClick = onClick,
+        label = { Text(label, fontSize = 10.sp) },
+        modifier = Modifier.padding(vertical = 2.dp)
+    )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FlowRow(modifier: Modifier = Modifier, maxItemsInEachRow: Int = Int.MAX_VALUE, content: @Composable () -> Unit) {
-    androidx.compose.foundation.layout.FlowRow(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        content()
+fun AuthAnalysisScreen(viewModel: TerminalViewModel, onBack: () -> Unit) {
+    val logs by viewModel.researchLogs.collectAsState()
+    val sdf = remember { SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault()) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        TopAppBar(
+            title = { Text("Auth Analysis") },
+            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) } },
+            actions = {
+                Button(onClick = { viewModel.startAuthAnalysis() }, modifier = Modifier.padding(end = 8.dp)) {
+                    Text("Capture Auth")
+                }
+                IconButton(onClick = { viewModel.clearResearchLogs() }) { Icon(Icons.Default.Delete, contentDescription = "Clear") }
+            }
+        )
+
+        LazyColumn(modifier = Modifier.weight(1f).background(Color(0xFF1A1A1A)).padding(8.dp)) {
+            items(logs) { log ->
+                Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), colors = CardDefaults.cardColors(containerColor = Color.Black)) {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(sdf.format(Date(log.timestamp)), color = Color.Gray, fontSize = 10.sp)
+                            Text(log.type, color = if (log.type == "WRITE") Color.Cyan else Color.Green, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                        }
+                        Text(log.charUuid, color = Color.LightGray, fontSize = 9.sp)
+                        Text(log.data, color = Color.White, fontFamily = FontFamily.Monospace, fontSize = 14.sp)
+                    }
+                }
+            }
+        }
+        
+        if (logs.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No auth traffic captured. Click 'Capture Auth' and reconnect device.", color = Color.Gray, style = MaterialTheme.typography.bodyMedium)
+            }
+        }
     }
 }

@@ -1,0 +1,85 @@
+# GoTchaTerminal Project To-Do List for Gemini
+
+# BLE Integration
+- Identity Terminal:
+  - [ ] Connect all buttons to BLEManager methods
+  - [ ] Verify read operations for MAC, Advertisement, Status, Key, Blob
+  - [ ] Enable notifications for live updates
+  - [ ] Implement challenge-response logging
+
+- Challenge Monitor:
+  - [ ] Wire button callbacks to BLEManager reads/writes
+  - [ ] Automatically log timestamp, UUID, payload, hex, ASCII
+  - [ ] Export session to JSON/BIN
+
+- Comparison Mode:
+  - [ ] Connect UI to real/ESP session data
+  - [ ] Ensure packets and notifications update live
+
+# Firmware & OTA
+- Firmware Browser:
+  - [ ] Parse .bin and .img files
+  - [ ] Extract headers, UUIDs, strings, version info
+  - [ ] Connect extracted data to UI screens
+
+- SUOTA Patch Engine:
+  - [ ] Complete patching logic
+  - [ ] Test on 2.0.0.2.bin and Suota-Go-Plus firmware
+
+- OTA Logging:
+  - [ ] Ensure live packet feedback and error reporting
+
+- Custom Firmware Support:
+  - [ ] Implement GATT table injection for patched firmware
+  - [ ] Wire Key, Blob, Config reads over BLE
+
+# Wear OS Companion App
+- Offline Caching:
+  - [ ] Cache all captured packets, notifications, reads, writes, advertisements, challenge-response sessions locally
+  - [ ] Automatically sync cached data to phone on reconnect
+
+- Tiles & Complications:
+  - [ ] Implement watch face complications for Device Connected, RSSI, Battery, Notifications, Packet Count, Session Timer, Capture Status
+  - [ ] Implement quick tiles for Scan, Connect, Packet Counter, Session
+
+- Terminal Access:
+  - [ ] HEX/ASCII consoles fully wired to BLE reads/writes
+  - [ ] Live RX/TX stream display
+
+- Research Screens:
+  - [ ] Packet Replay wired to captured sessions
+  - [ ] UUID Browser connected to BLEManager and local DB
+  - [ ] Service Diff connected to session comparison
+  - [ ] Session Compare wired to live data
+
+# UI & Navigation
+- ViewModel Wiring:
+  - [ ] Connect all screens to ViewModel methods
+  - [ ] Ensure live updates for reads, writes, notifications
+
+- Feedback & Logging:
+  - [ ] Display real-time updates for writes, reads, notifications
+  - [ ] Implement packet/session export/import
+
+- Search & Sorting:
+  - [ ] Device scanner lists support search, filter, RSSI sort
+
+# Logging & Export
+- Session Export:
+  - [ ] JSON, BIN, HEX export for captured sessions
+  - [ ] Firmware extraction export for Key, Blob, Config
+
+# Security & Research Tools
+- GATT Server Lab:
+  - [ ] Fully implement peripheral emulation
+  - [ ] Capture all reads, writes, notifications, and advertisements
+
+- Advertisement Analyzer:
+  - [ ] Capture and store manufacturer data, service data, flags, RSSI, UUIDs
+  - [ ] Automatically attach to session logs
+
+# Final Checks
+- [ ] All menu buttons wired or marked Not Yet Implemented with task ID
+- [ ] Material 3 UI consistent across screens and devices
+- [ ] Responsive layouts for all screen sizes
+- [ ] Offline-first operation fully functional on Wear OS

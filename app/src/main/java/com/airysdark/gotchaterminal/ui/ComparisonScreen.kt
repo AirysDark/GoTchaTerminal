@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,8 +17,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airysdark.gotchaterminal.ble.BleSession
-import com.airysdark.gotchaterminal.ble.ComparisonResult
+import com.airysdark.gotchaterminal.models.ble.BleSession
+import com.airysdark.gotchaterminal.models.ble.ComparisonResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +37,7 @@ fun ComparisonScreen(
             title = { Text("Comparison Mode") },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
             },
             actions = {
@@ -49,9 +50,9 @@ fun ComparisonScreen(
         Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
             CaptureCard(
                 modifier = Modifier.weight(1f).padding(4.dp),
-                title = "Real Go-tcha",
+                title = "Real GoTcha",
                 session = realSession,
-                isCapturing = isCapturing && realSession?.name == "Real Go-tcha",
+                isCapturing = isCapturing && realSession?.name == "Real GoTcha",
                 onStart = { onStartCapture(true) },
                 onStop = { onStopCapture(true) }
             )
@@ -66,7 +67,7 @@ fun ComparisonScreen(
             )
         }
 
-        Divider(modifier = Modifier.padding(vertical = 8.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
         if (comparisonResult != null) {
             ComparisonResultView(comparisonResult)

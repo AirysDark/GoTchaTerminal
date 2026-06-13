@@ -17,7 +17,7 @@ import com.airysdark.gotchaterminal.ui.TerminalViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val bleManager by lazy { BLEManager(applicationContext) }
+    private val bleManager by lazy { BLEManager.getInstance(applicationContext) }
     
     private val viewModel: TerminalViewModel by viewModels {
         object : ViewModelProvider.Factory {
